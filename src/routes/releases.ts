@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { name, dueDate, additionalInfo } = req.body;
+  const { name, dueDate, additionalInfo, steps } = req.body;
 
   if (!name || !dueDate) {
     return res.status(400).json({ message: "Name and dueDate required" });
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     `INSERT INTO releases (name, due_date, additional_info, steps)
      VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [name, dueDate, additionalInfo || null, defaultSteps],
+    [name, dueDate, additionalInfo || null, steps || defaultSteps],
   );
 
   const release = result.rows[0];
