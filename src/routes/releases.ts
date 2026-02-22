@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { steps, additionalInfo } = req.body;
+  const { name,  steps, additionalInfo } = req.body;
 
   const existing = await pool.query("SELECT * FROM releases WHERE id = $1", [
     id,
@@ -69,10 +69,11 @@ router.put("/:id", async (req, res) => {
     `UPDATE releases
      SET steps = $1,
          additional_info = COALESCE($2, additional_info),
+         name = COALESCE($3, name),
          updated_at = NOW()
-     WHERE id = $3
+     WHERE id = $4
      RETURNING *`,
-    [updatedSteps, additionalInfo, id],
+    [updatedSteps, additionalInfo, name, id],
   );
 
   const release = result.rows[0];
