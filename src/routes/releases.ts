@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { pool } from "../db";
-import { computeStatus } from "../utils/computeStatus";
+import { pool } from "../db.js";
+import { computeStatus } from "../utils/computeStatus.js";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     "SELECT * FROM releases ORDER BY created_at DESC",
   );
 
-  const releases = result.rows.map((r) => ({
+  const releases = result.rows.map((r: any) => ({
     ...r,
     status: computeStatus(r.steps),
   }));
